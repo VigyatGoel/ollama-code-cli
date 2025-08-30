@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ollamacode"
+version = "1.0.0"
+description = "A CLI tool for coding tasks using local LLMs with tool calling"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{name = "Vigyat Goel", email = "vigyatgoel@gmail.com"}]
+license = {text = "MIT"}
+keywords = ["cli", "ollama", "llm", "ai", "coding"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "click>=8.2.1",
+    "ollama>=0.5.3",
+    "rich>=13.7.1",
+    "yaspin>=3.0.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/VigyatGoel/ollama-code"
+Repository = "https://github.com/VigyatGoel/ollama-code"
+Issues = "https://github.com/VigyatGoel/ollama-code/issues"
+
+[project.scripts]
+ollama-code = "ollama_code.cli.cli:main"
