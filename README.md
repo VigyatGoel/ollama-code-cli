@@ -91,8 +91,8 @@ ollamacode/
 First, install a compatible model in Ollama:
 ```bash
 # Choose one of these models:
-ollama pull qwen3
-ollama pull llama3.1
+ollama pull qwen3:4b
+ollama pull qwen2.5:3b
 ```
 
 Then install the CLI:
