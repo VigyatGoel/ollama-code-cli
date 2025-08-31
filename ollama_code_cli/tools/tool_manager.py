@@ -192,14 +192,14 @@ class ToolManager:
                 # Get current working directory and environment
                 current_dir = os.getcwd()
                 env = os.environ.copy()
-                
+
                 result = subprocess.run(
                     [sys.executable, temp_file],
                     capture_output=True,
                     text=True,
                     timeout=30,
                     cwd=current_dir,
-                    env=env
+                    env=env,
                 )
 
                 return {
@@ -207,7 +207,9 @@ class ToolManager:
                     "stdout": result.stdout,
                     "stderr": result.stderr,
                     "returncode": result.returncode,
-                    "message": "Code executed successfully" if result.returncode == 0 else f"Code execution failed with return code {result.returncode}"
+                    "message": "Code executed successfully"
+                    if result.returncode == 0
+                    else f"Code execution failed with return code {result.returncode}",
                 }
             else:
                 return {
@@ -215,7 +217,10 @@ class ToolManager:
                     "message": f"Language '{language}' not supported for execution",
                 }
         except subprocess.TimeoutExpired:
-            return {"status": "error", "message": "Code execution timed out (30s limit)"}
+            return {
+                "status": "error",
+                "message": "Code execution timed out (30s limit)",
+            }
         except Exception as e:
             return {"status": "error", "message": f"Failed to execute code: {str(e)}"}
         finally:
@@ -290,7 +295,7 @@ class ToolManager:
                 "message": f"File not found: {filepath}",
             }
 
-        if not filepath.endswith('.py'):
+        if not filepath.endswith(".py"):
             return {
                 "status": "error",
                 "message": f"File is not a Python file: {filepath}",
@@ -299,14 +304,14 @@ class ToolManager:
         try:
             current_dir = os.getcwd()
             env = os.environ.copy()
-            
+
             result = subprocess.run(
                 [sys.executable, filepath],
                 capture_output=True,
                 text=True,
                 timeout=30,
                 cwd=current_dir,
-                env=env
+                env=env,
             )
 
             return {
@@ -314,12 +319,20 @@ class ToolManager:
                 "stdout": result.stdout,
                 "stderr": result.stderr,
                 "returncode": result.returncode,
-                "message": f"Python file executed successfully: {filepath}" if result.returncode == 0 else f"Python file execution failed with return code {result.returncode}: {filepath}"
+                "message": f"Python file executed successfully: {filepath}"
+                if result.returncode == 0
+                else f"Python file execution failed with return code {result.returncode}: {filepath}",
             }
         except subprocess.TimeoutExpired:
-            return {"status": "error", "message": f"Python file execution timed out (30s limit): {filepath}"}
+            return {
+                "status": "error",
+                "message": f"Python file execution timed out (30s limit): {filepath}",
+            }
         except Exception as e:
-            return {"status": "error", "message": f"Failed to run Python file {filepath}: {str(e)}"}
+            return {
+                "status": "error",
+                "message": f"Failed to run Python file {filepath}: {str(e)}",
+            }
 
     def get_tools_for_ollama(self) -> list:
         """Format tools for Ollama API."""

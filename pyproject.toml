@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ollamacode"
-version = "1.0.0"
+name = "ollama_code_cli"
+version = "1.0.1"
 description = "A CLI tool for coding tasks using local LLMs with tool calling"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -28,9 +28,14 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/vigyatgoel/ollamacode"
-Repository = "https://github.com/vigyatgoel/ollamacode"
-Issues = "https://github.com/vigyatgoel/ollamacode/issues"
+Homepage = "https://github.com/vigyatgoel/ollama-code-cli"
+Repository = "https://github.com/vigyatgoel/ollama-code-cli"
+Issues = "https://github.com/vigyatgoel/ollama-code-cli/issues"
 
 [project.scripts]
-ollamacode = "ollamacode.cli.cli:main"
+ollama-code-cli = "ollama_code_cli.cli.cli:main"
+
+[dependency-groups]
+dev = [
+    "twine>=6.1.0",
+]

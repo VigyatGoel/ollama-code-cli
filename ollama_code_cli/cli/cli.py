@@ -14,7 +14,7 @@ from rich.prompt import Prompt
 from rich.table import Table
 from rich.text import Text
 from yaspin import yaspin
-from ollamacode.tools.tool_manager import ToolManager
+from ollama_code_cli.tools.tool_manager import ToolManager
 
 
 class OllamaCodeCLI:
@@ -80,7 +80,7 @@ class OllamaCodeCLI:
             )
 
         self.console.print(result_panel)
-        
+
         # Show output for code execution tools
         if tool_name in ["execute_code", "run_python_file", "run_command"]:
             if result.get("stdout"):
@@ -90,7 +90,7 @@ class OllamaCodeCLI:
                     border_style="blue",
                 )
                 self.console.print(output_panel)
-            
+
             if result.get("stderr"):
                 error_panel = Panel(
                     result["stderr"],

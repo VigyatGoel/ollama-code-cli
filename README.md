@@ -14,20 +14,20 @@ A beautiful, interactive command-line interface tool for coding tasks using loca
 ## Installation
 
 ```bash
-pip install ollamacode
+pip install ollama-code-cli
 ```
 
 ## Usage
 
 ```bash
 # Start an interactive session
-ollamacode
+ollama-code-cli
 
 # Run a single command
-ollamacode "Create a Python function to calculate factorial"
+ollama-code-cli "Create a Python function to calculate factorial"
 
 # Use a specific model
-ollamacode --model llama3.1 "Explain how async/await works in Python"
+ollama-code-cli --model llama3.1 "Explain how async/await works in Python"
 ```
 
 ## Available Tools
@@ -42,17 +42,17 @@ ollamacode --model llama3.1 "Explain how async/await works in Python"
 
 1. Create a Python script and save it to a file:
    ```bash
-   ollamacode "Create a Python script that calculates factorial and save it to a file named factorial.py"
+   ollama-code-cli "Create a Python script that calculates factorial and save it to a file named factorial.py"
    ```
 
 2. Read a file and explain its contents:
    ```bash
-   ollamacode "Read the contents of main.py and explain what it does"
+   ollama-code-cli "Read the contents of main.py and explain what it does"
    ```
 
 3. Execute a shell command:
    ```bash
-   ollamacode "List all files in the current directory"
+   ollama-code-cli "List all files in the current directory"
    ```
 
 ## Interactive Mode
@@ -60,7 +60,7 @@ ollamacode --model llama3.1 "Explain how async/await works in Python"
 Launch the interactive mode for a conversational experience:
 
 ```bash
-ollamacode
+ollama-code-cli
 ```
 
 In interactive mode, you can:
@@ -97,7 +97,7 @@ ollama pull llama3.1
 
 Then install the CLI:
 ```bash
-pip install ollamacode
+pip install ollama-code-cli
 ```
 
 ## Requirements
