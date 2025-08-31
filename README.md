@@ -109,7 +109,7 @@ pip install ollama-code-cli
 
 - Python 3.13+
 - Ollama installed and running
-- An Ollama model that supports tool calling (e.g., Qwen3, Llama3.1+)
+- An Ollama model that supports tool calling (e.g., Qwen3, Qwen2.5, etc)
 
 ## Dependencies
 
