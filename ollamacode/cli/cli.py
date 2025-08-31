@@ -80,6 +80,24 @@ class OllamaCodeCLI:
             )
 
         self.console.print(result_panel)
+        
+        # Show output for code execution tools
+        if tool_name in ["execute_code", "run_python_file", "run_command"]:
+            if result.get("stdout"):
+                output_panel = Panel(
+                    result["stdout"],
+                    title="📤 Output",
+                    border_style="blue",
+                )
+                self.console.print(output_panel)
+            
+            if result.get("stderr"):
+                error_panel = Panel(
+                    result["stderr"],
+                    title="⚠️ Error Output",
+                    border_style="yellow",
+                )
+                self.console.print(error_panel)
 
     def chat(self, message: str) -> str:
         """Have a conversation with the LLM."""
@@ -98,6 +116,7 @@ You have access to several tools that can help you perform actions on the user's
 3. execute_code: Execute code in a subprocess
 4. list_files: List files in a directory
 5. run_command: Run a shell command
+6. run_python_file: Run an existing Python file
 
 When the user asks you to perform a task that requires one of these actions, use the appropriate tool. 
 For example:
@@ -124,6 +143,7 @@ Examples of when TO use tools:
 - "Read the contents of file.txt" -> Use read_file tool
 - "Create a Python script that prints 'Hello World'" -> Use write_file tool
 - "Run this Python code: print('Hello World')" -> Use execute_code tool
+- "Run the file script.py" -> Use run_python_file tool
 - "List all files in the current directory" -> Use list_files tool
 - "Show me the contents of my home directory" -> Use list_files tool""",
                 },
