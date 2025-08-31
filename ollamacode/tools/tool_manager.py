@@ -95,6 +95,20 @@ class ToolManager:
                     "required": ["command"],
                 },
             },
+            "run_python_file": {
+                "function": self._run_python_file,
+                "description": "Run an existing Python file",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "filepath": {
+                            "type": "string",
+                            "description": "Path to the Python file to execute",
+                        }
+                    },
+                    "required": ["filepath"],
+                },
+            },
         }
 
     def _read_file(self, filepath: str) -> Dict[str, Any]:
@@ -166,6 +180,7 @@ class ToolManager:
                 "message": "No code provided to execute",
             }
 
+        temp_file = None
         try:
             if language == "python":
                 with tempfile.NamedTemporaryFile(
@@ -174,20 +189,25 @@ class ToolManager:
                     f.write(code)
                     temp_file = f.name
 
+                # Get current working directory and environment
+                current_dir = os.getcwd()
+                env = os.environ.copy()
+                
                 result = subprocess.run(
                     [sys.executable, temp_file],
                     capture_output=True,
                     text=True,
                     timeout=30,
+                    cwd=current_dir,
+                    env=env
                 )
 
-                os.unlink(temp_file)
-
                 return {
-                    "status": "success",
+                    "status": "success" if result.returncode == 0 else "error",
                     "stdout": result.stdout,
                     "stderr": result.stderr,
                     "returncode": result.returncode,
+                    "message": "Code executed successfully" if result.returncode == 0 else f"Code execution failed with return code {result.returncode}"
                 }
             else:
                 return {
@@ -195,9 +215,16 @@ class ToolManager:
                     "message": f"Language '{language}' not supported for execution",
                 }
         except subprocess.TimeoutExpired:
-            return {"status": "error", "message": "Code execution timed out"}
+            return {"status": "error", "message": "Code execution timed out (30s limit)"}
         except Exception as e:
             return {"status": "error", "message": f"Failed to execute code: {str(e)}"}
+        finally:
+            # Clean up temporary file
+            if temp_file and os.path.exists(temp_file):
+                try:
+                    os.unlink(temp_file)
+                except Exception:
+                    pass  # Ignore cleanup errors
 
     def _list_files(self, path: str = ".") -> Dict[str, Any]:
         """List files in a directory."""
@@ -248,6 +275,51 @@ class ToolManager:
             return {"status": "error", "message": "Command execution timed out"}
         except Exception as e:
             return {"status": "error", "message": f"Failed to run command: {str(e)}"}
+
+    def _run_python_file(self, filepath: str) -> Dict[str, Any]:
+        """Run an existing Python file."""
+        if not filepath or not isinstance(filepath, str):
+            return {
+                "status": "error",
+                "message": "Invalid filepath provided",
+            }
+
+        if not os.path.exists(filepath):
+            return {
+                "status": "error",
+                "message": f"File not found: {filepath}",
+            }
+
+        if not filepath.endswith('.py'):
+            return {
+                "status": "error",
+                "message": f"File is not a Python file: {filepath}",
+            }
+
+        try:
+            current_dir = os.getcwd()
+            env = os.environ.copy()
+            
+            result = subprocess.run(
+                [sys.executable, filepath],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                cwd=current_dir,
+                env=env
+            )
+
+            return {
+                "status": "success" if result.returncode == 0 else "error",
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+                "returncode": result.returncode,
+                "message": f"Python file executed successfully: {filepath}" if result.returncode == 0 else f"Python file execution failed with return code {result.returncode}: {filepath}"
+            }
+        except subprocess.TimeoutExpired:
+            return {"status": "error", "message": f"Python file execution timed out (30s limit): {filepath}"}
+        except Exception as e:
+            return {"status": "error", "message": f"Failed to run Python file {filepath}: {str(e)}"}
 
     def get_tools_for_ollama(self) -> list:
         """Format tools for Ollama API."""
