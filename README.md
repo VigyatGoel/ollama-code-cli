@@ -1,38 +1,88 @@
+
 # Ollama Code CLI
 
 [![PyPI version](https://badge.fury.io/py/ollama-code-cli.svg)](https://badge.fury.io/py/ollama-code-cli)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A beautiful, interactive command-line interface tool for coding tasks using local LLMs via Ollama with tool calling capabilities.
+> **An elegant, interactive command-line tool for coding tasks using local LLMs via Ollama, with advanced tool-calling capabilities.**
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Available Tools](#available-tools)
+- [Examples](#examples)
+- [Interactive Mode](#interactive-mode)
+- [Project Structure](#project-structure)
+- [Dependencies](#dependencies)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
 
 ## Features
 
-- 🎨 **Beautiful CLI Interface** - Rich colors and structured output
-- 🤖 **Local AI Power** - Interact with local LLMs through Ollama
-- 🛠️ **Tool Calling** - Execute coding-related tools (file operations, code execution, etc.)
-- 💬 **Interactive Mode** - Maintain conversation context for multi-turn interactions
-- 📝 **Markdown Support** - Beautifully formatted responses with syntax highlighting
-- 📋 **Structured Output** - Clear panels and tables for tool calls and results
+- 🎨 **Elegant CLI Interface:** Rich colors and structured output
+- 🤖 **Local AI Power:** Interact with local LLMs through Ollama
+- 🛠️ **Tool Calling:** Execute coding-related tools (file operations, code execution, etc.)
+- 💬 **Interactive Mode:** Maintain conversation context for multi-turn interactions
+- 📝 **Markdown Support:** Elegantly formatted responses with syntax highlighting
+- 📋 **Structured Output:** Clear panels and tables for tool calls and results
+
+---
 
 ## Installation
+
+First, install a compatible model in Ollama:
+
+```bash
+# Choose one of these models:
+ollama pull qwen3:4b
+ollama pull qwen2.5:3b
+```
+
+Then install the CLI:
 
 ```bash
 pip install ollama-code-cli
 ```
 
+---
+
+## Requirements
+
+- Python 3.13+
+- Ollama installed and running
+- An Ollama model that supports tool calling (e.g., Qwen3, Qwen2.5, etc.)
+
+---
+
 ## Usage
 
+Start an interactive session:
+
 ```bash
-# Start an interactive session
-ollama-code-cli
-
-# Run a single command
-ollama-code-cli "Create a Python function to calculate factorial"
-
-# Use a specific model
-ollama-code-cli --model llama3.1 "Explain how async/await works in Python"
+ollama-code-cli --model qwen3:4b
 ```
+
+Run a single command:
+
+```bash
+ollama-code-cli "Create a Python function to calculate factorial"
+```
+
+Use a specific model:
+
+```bash
+ollama-code-cli --model qwen3:4b "Explain how async/await works in Python"
+```
+
+---
 
 ## Available Tools
 
@@ -42,22 +92,29 @@ ollama-code-cli --model llama3.1 "Explain how async/await works in Python"
 - `list_files`: List files in a directory
 - `run_command`: Run a shell command
 
+---
+
 ## Examples
 
-1. Create a Python script and save it to a file:
-   ```bash
-   ollama-code-cli "Create a Python script that calculates factorial and save it to a file named factorial.py"
-   ```
+**1. Create a Python script and save it to a file:**
 
-2. Read a file and explain its contents:
-   ```bash
-   ollama-code-cli "Read the contents of main.py and explain what it does"
-   ```
+```bash
+ollama-code-cli "Create a Python script that calculates factorial and save it to a file named factorial.py"
+```
 
-3. Execute a shell command:
-   ```bash
-   ollama-code-cli "List all files in the current directory"
-   ```
+**2. Read a file and explain its contents:**
+
+```bash
+ollama-code-cli "Read the contents of main.py and explain what it does"
+```
+
+**3. Execute a shell command:**
+
+```bash
+ollama-code-cli "List all files in the current directory"
+```
+
+---
 
 ## Interactive Mode
 
@@ -68,11 +125,14 @@ ollama-code-cli
 ```
 
 In interactive mode, you can:
+
 - Have multi-turn conversations with the AI
-- See beautiful formatted responses with Markdown support
+- See elegantly formatted responses with Markdown support
 - Watch tool calls and results in real-time with visual panels
 - Clear conversation history with the `clear` command
 - Exit gracefully with the `exit` command
+
+---
 
 ## Project Structure
 
@@ -91,28 +151,22 @@ ollama-code-cli/
 └── README.md
 ```
 
-## Installation
-
-First, install a compatible model in Ollama:
-```bash
-# Choose one of these models:
-ollama pull qwen3:4b
-ollama pull qwen2.5:3b
-```
-
-Then install the CLI:
-```bash
-pip install ollama-code-cli
-```
-
-## Requirements
-
-- Python 3.13+
-- Ollama installed and running
-- An Ollama model that supports tool calling (e.g., Qwen3, Qwen2.5, etc)
+---
 
 ## Dependencies
 
-- [Rich](https://github.com/Textualize/rich) - For beautiful terminal formatting
-- [Click](https://click.palletsprojects.com/) - For command-line interface
-- [Ollama Python Client](https://github.com/ollama/ollama-python) - For Ollama integration
+- [Rich](https://github.com/Textualize/rich) — Elegant terminal formatting
+- [Click](https://click.palletsprojects.com/) — Command-line interface
+- [Ollama Python Client](https://github.com/ollama/ollama-python) — Ollama integration
+
+---
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any improvements, bug fixes, or suggestions.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
