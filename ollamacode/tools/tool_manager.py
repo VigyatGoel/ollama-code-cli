@@ -99,6 +99,12 @@ class ToolManager:
 
     def _read_file(self, filepath: str) -> Dict[str, Any]:
         """Read a file and return its contents."""
+        if not filepath or not isinstance(filepath, str):
+            return {
+                "status": "error",
+                "message": "Invalid filepath provided",
+            }
+
         try:
             with open(filepath, "r", encoding="utf-8") as f:
                 content = f.read()
@@ -115,10 +121,20 @@ class ToolManager:
 
     def _write_file(self, filepath: str, content: str) -> Dict[str, Any]:
         """Write content to a file."""
+        if not filepath or not isinstance(filepath, str):
+            return {
+                "status": "error",
+                "message": "Invalid filepath provided",
+            }
+
+        if content is None or not isinstance(content, str):
+            return {
+                "status": "error",
+                "message": "Invalid content provided",
+            }
+
         try:
-            # Get the directory path, defaulting to current directory if none
             directory = os.path.dirname(filepath) or "."
-            # Create directory if it doesn't exist
             if directory != ".":
                 os.makedirs(directory, exist_ok=True)
             with open(filepath, "w", encoding="utf-8") as f:
@@ -132,16 +148,32 @@ class ToolManager:
 
     def _execute_code(self, code: str, language: str = "python") -> Dict[str, Any]:
         """Execute code in a subprocess."""
+        if not code or not isinstance(code, str):
+            return {
+                "status": "error",
+                "message": "Invalid code provided",
+            }
+
+        if not language or not isinstance(language, str):
+            return {
+                "status": "error",
+                "message": "Invalid language provided",
+            }
+
+        if not code.strip():
+            return {
+                "status": "error",
+                "message": "No code provided to execute",
+            }
+
         try:
             if language == "python":
-                # Create a temporary file
                 with tempfile.NamedTemporaryFile(
                     mode="w", suffix=".py", delete=False
                 ) as f:
                     f.write(code)
                     temp_file = f.name
 
-                # Execute the Python file
                 result = subprocess.run(
                     [sys.executable, temp_file],
                     capture_output=True,
@@ -149,7 +181,6 @@ class ToolManager:
                     timeout=30,
                 )
 
-                # Clean up
                 os.unlink(temp_file)
 
                 return {
@@ -170,6 +201,12 @@ class ToolManager:
 
     def _list_files(self, path: str = ".") -> Dict[str, Any]:
         """List files in a directory."""
+        if not path or not isinstance(path, str):
+            return {
+                "status": "error",
+                "message": "Invalid path provided",
+            }
+
         try:
             files = os.listdir(path)
             return {
@@ -185,6 +222,18 @@ class ToolManager:
 
     def _run_command(self, command: str) -> Dict[str, Any]:
         """Run a shell command."""
+        if not command or not isinstance(command, str):
+            return {
+                "status": "error",
+                "message": "Invalid command provided",
+            }
+
+        if not command.strip():
+            return {
+                "status": "error",
+                "message": "No command provided to execute",
+            }
+
         try:
             result = subprocess.run(
                 command, shell=True, capture_output=True, text=True, timeout=30

@@ -4,12 +4,11 @@ A beautiful, interactive command-line interface tool for coding tasks using loca
 
 ## Features
 
-- 🎨 **Beautiful CLI Interface** - Rich colors, animations, and structured output
+- 🎨 **Beautiful CLI Interface** - Rich colors and structured output
 - 🤖 **Local AI Power** - Interact with local LLMs through Ollama
 - 🛠️ **Tool Calling** - Execute coding-related tools (file operations, code execution, etc.)
 - 💬 **Interactive Mode** - Maintain conversation context for multi-turn interactions
 - 📝 **Markdown Support** - Beautifully formatted responses with syntax highlighting
-- ⏳ **Animations** - Visual feedback with spinners during processing
 - 📋 **Structured Output** - Clear panels and tables for tool calls and results
 
 ## Installation
@@ -22,26 +21,13 @@ pip install ollamacode
 
 ```bash
 # Start an interactive session
-ollama-code
+ollamacode
 
 # Run a single command
-ollama-code "Create a Python function to calculate factorial"
+ollamacode "Create a Python function to calculate factorial"
 
 # Use a specific model
-ollama-code --model qwen3:1.7b "Explain how async/await works in Python"
-```
-
-## Usage
-
-```bash
-# Start an interactive session
-ollama-code
-
-# Run a single command
-ollama-code "Create a Python function to calculate factorial"
-
-# Use a specific model
-ollama-code --model qwen3:1.7b "Explain how async/await works in Python"
+ollamacode --model llama3.1 "Explain how async/await works in Python"
 ```
 
 ## Available Tools
@@ -56,17 +42,17 @@ ollama-code --model qwen3:1.7b "Explain how async/await works in Python"
 
 1. Create a Python script and save it to a file:
    ```bash
-   ollama-code "Create a Python script that calculates factorial and save it to a file named factorial.py"
+   ollamacode "Create a Python script that calculates factorial and save it to a file named factorial.py"
    ```
 
 2. Read a file and explain its contents:
    ```bash
-   ollama-code "Read the contents of main.py and explain what it does"
+   ollamacode "Read the contents of main.py and explain what it does"
    ```
 
 3. Execute a shell command:
    ```bash
-   ollama-code "List all files in the current directory"
+   ollamacode "List all files in the current directory"
    ```
 
 ## Interactive Mode
@@ -74,7 +60,7 @@ ollama-code --model qwen3:1.7b "Explain how async/await works in Python"
 Launch the interactive mode for a conversational experience:
 
 ```bash
-ollama-code
+ollamacode
 ```
 
 In interactive mode, you can:
@@ -87,8 +73,8 @@ In interactive mode, you can:
 ## Project Structure
 
 ```
-ollama_code/
-├── ollama_code/
+ollamacode/
+├── ollamacode/
 │   ├── __init__.py
 │   ├── cli/
 │   │   ├── __init__.py
@@ -96,11 +82,22 @@ ollama_code/
 │   ├── tools/
 │   │   ├── __init__.py
 │   │   └── tool_manager.py # Tool implementations
-│   └── utils/
-│       └── __init__.py
-├── main.py                 # Entry point
 ├── pyproject.toml          # Project configuration
 └── README.md
+```
+
+## Installation
+
+First, install a compatible model in Ollama:
+```bash
+# Choose one of these models:
+ollama pull qwen3
+ollama pull llama3.1
+```
+
+Then install the CLI:
+```bash
+pip install ollamacode
 ```
 
 ## Requirements
@@ -112,6 +109,5 @@ ollama_code/
 ## Dependencies
 
 - [Rich](https://github.com/Textualize/rich) - For beautiful terminal formatting
-- [Yaspin](https://github.com/pavdmyt/yaspin) - For terminal spinners
 - [Click](https://click.palletsprojects.com/) - For command-line interface
 - [Ollama Python Client](https://github.com/ollama/ollama-python) - For Ollama integration

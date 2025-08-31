@@ -4,6 +4,7 @@ CLI interface for the Ollama Code CLI.
 
 import click
 import json
+import re
 from typing import Optional
 from ollama import Client
 from rich.console import Console
@@ -21,7 +22,6 @@ class OllamaCodeCLI:
 
     def __init__(self, model: str = "qwen3:4b"):
         self.model = model
-        # amazonq-ignore-next-line
         self.client = Client()
         self.conversation_history = []
         self.tool_manager = ToolManager()
@@ -36,7 +36,6 @@ class OllamaCodeCLI:
         self.console.print(welcome_text, justify="center")
         self.console.print(subtitle, justify="center")
 
-        # Show model info
         model_panel = Panel(
             f"Using model: [bold cyan]{self.model}[/bold cyan]",
             title="Model Info",
@@ -44,7 +43,6 @@ class OllamaCodeCLI:
         )
         self.console.print(model_panel)
 
-        # Show available tools
         table = Table(
             title="Available Tools", show_header=True, header_style="bold magenta"
         )
@@ -68,7 +66,6 @@ class OllamaCodeCLI:
 
     def _print_tool_result(self, tool_name: str, result: dict):
         """Print a tool result with styling."""
-        # amazonq-ignore-next-line
         if result.get("status") == "success":
             result_panel = Panel(
                 f"[bold green]✓ Success:[/bold green] {result.get('message', 'Tool executed successfully')}",
@@ -84,14 +81,11 @@ class OllamaCodeCLI:
 
         self.console.print(result_panel)
 
-    # amazonq-ignore-next-line
     def chat(self, message: str) -> str:
         """Have a conversation with the LLM."""
-        # Add user message to history
         self.conversation_history.append({"role": "user", "content": message})
 
-        # Initialize conversation history with system prompt if empty
-        if len(self.conversation_history) == 1:  # Only user message so far
+        if len(self.conversation_history) == 1:
             self.conversation_history.insert(
                 0,
                 {
@@ -113,38 +107,50 @@ For example:
 - If asked to list files in a directory, use the list_files tool
 - If asked to run a shell command, use the run_command tool
 
-Only use tools when necessary to complete the user's request. For general programming questions or 
-explanations, respond directly without using any tools.""",
+CRITICAL GUIDELINES:
+1. Only use tools when explicitly asked to perform an action that requires them
+2. For general conversation, greetings, or questions that don't require file operations, code execution, etc., respond directly without using any tools
+3. Never use tools for simple greetings like "hello" or "how are you"
+4. Always think carefully about whether a tool is needed before calling it
+5. If you're not sure if a tool is needed, it's better to respond directly without using tools
+
+Examples of when NOT to use tools:
+- "Hello" -> Respond directly with a greeting
+- "How are you?" -> Respond directly
+- "What is Python?" -> Explain directly
+- "Can you help me with this code?" -> Ask for details, don't use tools yet
+
+Examples of when TO use tools:
+- "Read the contents of file.txt" -> Use read_file tool
+- "Create a Python script that prints 'Hello World'" -> Use write_file tool
+- "Run this Python code: print('Hello World')" -> Use execute_code tool
+- "List all files in the current directory" -> Use list_files tool
+- "Show me the contents of my home directory" -> Use list_files tool""",
                 },
             )
 
-        # Get tools for Ollama
         tools = self.tool_manager.get_tools_for_ollama()
 
-        # Show spinner while processing
         with yaspin(text="Thinking...", color="yellow"):
-            # Send request to Ollama
             response = self.client.chat(
                 model=self.model, messages=self.conversation_history, tools=tools
             )
 
-        # Process response
         message = response.message
+        cleaned_content = re.sub(
+            r"<think>.*?</think>\s*", "", message.content, flags=re.DOTALL
+        )
         self.conversation_history.append(
-            {"role": message.role, "content": message.content}
+            {"role": message.role, "content": cleaned_content}
         )
 
-        # Handle tool calls if present
         if hasattr(message, "tool_calls") and message.tool_calls:
-            # Add tool calls to conversation history
             tool_call_message = {
                 "role": message.role,
-                "content": message.content,
+                "content": cleaned_content,
                 "tool_calls": [],
             }
 
-            # Convert tool calls to dict format for history
-            # amazonq-ignore-next-line
             for tool_call in message.tool_calls:
                 tool_call_message["tool_calls"].append(
                     {
@@ -155,15 +161,12 @@ explanations, respond directly without using any tools.""",
                     }
                 )
 
-                # Print the tool call
                 self._print_tool_call(
                     tool_call.function.name, tool_call.function.arguments
                 )
 
-            # Replace the last message with the one containing tool calls
             self.conversation_history[-1] = tool_call_message
 
-            # Handle tool calls
             tool_results = self.tool_manager.handle_tool_calls(
                 [
                     {
@@ -176,7 +179,6 @@ explanations, respond directly without using any tools.""",
                 ]
             )
 
-            # Print tool results
             for result in tool_results:
                 try:
                     result_data = json.loads(result["content"])
@@ -189,18 +191,20 @@ explanations, respond directly without using any tools.""",
 
             self.conversation_history.extend(tool_results)
 
-            # Show spinner while processing tool results
             with yaspin(text="Processing results...", color="yellow"):
-                # Send tool results back to model
                 response = self.client.chat(
                     model=self.model, messages=self.conversation_history, tools=tools
                 )
             message = response.message
-            self.conversation_history.append(
-                {"role": message.role, "content": message.content}
+            cleaned_content = re.sub(
+                r"<think>.*?</think>\s*", "", message.content, flags=re.DOTALL
             )
+            self.conversation_history.append(
+                {"role": message.role, "content": cleaned_content}
+            )
+            return cleaned_content
 
-        return message.content
+        return cleaned_content
 
     def interactive_mode(self):
         """Start an interactive chat session."""
@@ -229,13 +233,10 @@ explanations, respond directly without using any tools.""",
 
                 response = self.chat(user_input)
 
-                # Print the assistant's response in a nice format
                 self.console.print("\n[bold cyan]Assistant[/bold cyan] 🤖")
-                # Try to parse as markdown, fallback to plain text
                 try:
                     md = Markdown(response)
                     self.console.print(md)
-                # amazonq-ignore-next-line
                 except Exception:
                     self.console.print(response)
 
@@ -254,17 +255,14 @@ def main(model: str, prompt: Optional[str]):
     cli = OllamaCodeCLI(model=model)
 
     if prompt:
-        # Single command mode
         with yaspin(text="Processing...", color="yellow"):
             response = cli.chat(prompt)
-        # Try to parse as markdown, fallback to plain text
         try:
             md = Markdown(response)
             cli.console.print(md)
         except Exception:
             cli.console.print(response)
     else:
-        # Interactive mode
         cli.interactive_mode()
 
 

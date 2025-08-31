@@ -9,3 +9,5 @@ wheels/
 # Virtual environments
 .venv
 .ruff_cache
+
+QWEN.md
