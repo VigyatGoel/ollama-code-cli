@@ -1,5 +1,9 @@
 # Ollama Code CLI
 
+[![PyPI version](https://badge.fury.io/py/ollama-code-cli.svg)](https://badge.fury.io/py/ollama-code-cli)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A beautiful, interactive command-line interface tool for coding tasks using local LLMs via Ollama with tool calling capabilities.
 
 ## Features
@@ -73,8 +77,8 @@ In interactive mode, you can:
 ## Project Structure
 
 ```
-ollamacode/
-├── ollamacode/
+ollama-code-cli/
+├── ollama_code_cli/
 │   ├── __init__.py
 │   ├── cli/
 │   │   ├── __init__.py
@@ -83,6 +87,7 @@ ollamacode/
 │   │   ├── __init__.py
 │   │   └── tool_manager.py # Tool implementations
 ├── pyproject.toml          # Project configuration
+├── LICENSE
 └── README.md
 ```
 
