@@ -30,6 +30,7 @@
 - 🎨 **Elegant CLI Interface:** Rich colors and structured output
 - 🤖 **Local AI Power:** Interact with local LLMs through Ollama
 - 🛠️ **Tool Calling:** Execute coding-related tools (file operations, code execution, etc.)
+- 🔒 **Permission Prompts:** Safety prompts before executing potentially dangerous operations
 - 💬 **Interactive Mode:** Maintain conversation context for multi-turn interactions
 - 📝 **Markdown Support:** Elegantly formatted responses with syntax highlighting
 - 📋 **Structured Output:** Clear panels and tables for tool calls and results
@@ -81,6 +82,39 @@ Use a specific model:
 ```bash
 ollama-code-cli --model qwen3:4b "Explain how async/await works in Python"
 ```
+
+Disable permission prompts (use with caution):
+
+```bash
+ollama-code-cli --no-permission "Create and run a Python script"
+```
+
+---
+
+## Security Features
+
+The CLI includes built-in security features to protect against potentially dangerous operations:
+
+### Permission Prompts
+By default, the CLI will ask for your permission before executing potentially dangerous operations such as:
+- Writing or modifying files
+- Executing code
+- Running shell commands
+- Running Python files
+
+### Safe Operations
+These operations are considered safe and don't require permission:
+- Reading files
+- Listing directory contents
+
+### Bypassing Permission Prompts
+You can disable permission prompts using the `--no-permission` flag, but this should be used with caution:
+
+```bash
+ollama-code-cli --no-permission "Your prompt here"
+```
+
+**Warning:** Disabling permission prompts allows the AI to execute operations without user confirmation. Only use this in trusted environments.
 
 ---
 

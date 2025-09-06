@@ -11,3 +11,5 @@ wheels/
 .ruff_cache
 
 QWEN.md
+
+.env
