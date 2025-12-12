@@ -53,6 +53,30 @@ Then install the CLI:
 pip install ollama-code-cli
 ```
 
+### macOS Installation Note
+
+If you see an error like `"externally-managed-environment"` when using `pip3 install`, this is because modern macOS and Homebrew Python prevent global package installation. Use one of these methods instead:
+
+**Option 1: Use pipx**
+```bash
+brew install pipx
+pipx ensurepath
+pipx install ollama-code-cli
+```
+
+**Option 2: Use a virtual environment**
+```bash
+python3 -m venv ~/.venvs/ollama-code-cli
+source ~/.venvs/ollama-code-cli/bin/activate
+pip install ollama-code-cli
+```
+
+**Option 3: Use uv (Fast Python package manager)**
+```bash
+brew install uv
+uv tool install ollama-code-cli
+```
+
 ---
 
 ## Requirements
